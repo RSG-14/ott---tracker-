@@ -6,6 +6,7 @@ functions for inserting raw posts, sentiment results, and trends data,
 and for querying records needed by the dashboard and analyzer.
 """
 
+import os
 import sqlite3
 from pathlib import Path
 
@@ -16,7 +17,8 @@ load_dotenv()
 
 __version__ = "1.0.0"
 
-DB_PATH = Path(__file__).parent / "data" / "tracker.db"
+_default_db = Path(__file__).parent / "data" / "tracker.db"
+DB_PATH = Path(os.getenv("DB_PATH", str(_default_db)))
 
 
 def _connect() -> sqlite3.Connection:

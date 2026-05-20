@@ -1,6 +1,9 @@
 # Environment variables — never commit secrets
 .env
 
+# Streamlit secrets — never commit
+.streamlit/secrets.toml
+
 # Collected data
 data/
 
