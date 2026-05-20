@@ -7,13 +7,14 @@ and for querying records needed by the dashboard and analyzer.
 """
 
 import sqlite3
-import os
 from pathlib import Path
 
 import pandas as pd
 from dotenv import load_dotenv
 
 load_dotenv()
+
+__version__ = "1.0.0"
 
 DB_PATH = Path(__file__).parent / "data" / "tracker.db"
 
@@ -211,3 +212,8 @@ def get_weekly_snapshots() -> pd.DataFrame:
             "SELECT * FROM weekly_snapshots ORDER BY week_number, brand",
             conn,
         )
+
+
+if __name__ == "__main__":
+    init_db()
+    print(f"Database initialised at {DB_PATH}")

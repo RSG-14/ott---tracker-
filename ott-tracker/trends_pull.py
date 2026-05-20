@@ -8,10 +8,15 @@ platforms in India and returns a list of weekly score dicts.
 import time
 import logging
 
+from dotenv import load_dotenv
 from pytrends.request import TrendReq
 from pytrends.exceptions import TooManyRequestsError
 
+load_dotenv()
+
 logger = logging.getLogger(__name__)
+
+__version__ = "1.0.0"
 
 KEYWORDS = ["JioHotstar", "Netflix", "Amazon Prime Video"]
 COLUMN_MAP = {

@@ -11,6 +11,7 @@ from datetime import date, timedelta
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+from dotenv import load_dotenv
 
 from analyzer import analyze_batch
 from database import (
@@ -26,6 +27,10 @@ from reddit_pull import pull_reddit
 from trends_pull import pull_trends
 
 # ── Constants ────────────────────────────────────────────────────────────────
+
+__version__ = "1.0.0"
+
+_NO_DATA_MSG = "No data yet. Run a Reddit pull or add manual entries to get started."
 
 CAMPAIGN_START_WEEK: int | None = None  # set to a week number to show the campaign marker
 
@@ -78,6 +83,7 @@ def _filter_df(
 # ── App bootstrap ─────────────────────────────────────────────────────────────
 
 st.set_page_config(page_title="OTT Tracker", layout="wide", page_icon="📺")
+load_dotenv()
 init_db()
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -192,7 +198,7 @@ with tab1:
     st.subheader("Sentiment Trends by Brand")
 
     if df_snap.empty:
-        st.info("No snapshot data yet. Run a Reddit pull or add manual entries.")
+        st.info(_NO_DATA_MSG)
     else:
         fig = go.Figure()
 
@@ -239,7 +245,7 @@ with tab2:
     st.subheader("Share of Voice — Mention Volume by Brand")
 
     if df_snap.empty:
-        st.info("No snapshot data yet.")
+        st.info(_NO_DATA_MSG)
     else:
         fig2 = go.Figure()
 
@@ -274,7 +280,7 @@ with tab3:
     st.subheader("Top Catalog Keywords")
 
     if df_mentions.empty:
-        st.info("No mention data available for the selected filters.")
+        st.info(_NO_DATA_MSG)
     else:
         kw_counter: Counter = Counter()
         brand_kw: dict[str, Counter] = {}
@@ -291,7 +297,7 @@ with tab3:
                 brand_kw.setdefault(kw, Counter())[brand] += 1
 
         if not kw_counter:
-            st.info("No catalog keywords found in the filtered dataset.")
+            st.info("No catalog keywords found yet. They are extracted automatically during analysis.")
         else:
             top15 = kw_counter.most_common(15)
             labels = [k for k, _ in top15]
@@ -336,7 +342,7 @@ with tab4:
     )
 
     if df_trends.empty:
-        st.info("No trends data yet. Click 'Refresh Google Trends' to fetch data.")
+        st.info(_NO_DATA_MSG)
     else:
         dt = df_trends.copy()
         dt["date"] = pd.to_datetime(dt["date"])

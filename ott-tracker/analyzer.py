@@ -17,6 +17,8 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+__version__ = "1.0.0"
+
 BATCH_SIZE = 5
 
 SYSTEM_PROMPT = (
