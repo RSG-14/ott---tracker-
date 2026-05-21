@@ -115,6 +115,11 @@ if st.sidebar.button("🔄 Run Reddit Pull", use_container_width=True):
                 insert_mention(entry)
             compute_weekly_snapshot()
             st.sidebar.success(f"✓ Inserted {len(enriched)} records.")
+        except KeyError as exc:
+            st.sidebar.error(
+                f"Missing credential: {exc}. "
+                "Go to app Settings → Secrets and add all four API keys."
+            )
         except Exception as exc:
             st.sidebar.error(f"Reddit pull failed: {exc}")
 
